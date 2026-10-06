@@ -126,6 +126,11 @@ spec:
           - name: CARGO_REGISTRIES_{{ .Values.docBuilder.registryName | upper | replace "-" "_" }}_TOKEN
             valueFrom:
               secretKeyRef: {{ toYaml .Values.docBuilder.tokenSecretRef | nindent 16 }}
+          {{- if .Values.kellnr.proxy.enabled }}
+          - name: CARGO_REGISTRIES_{{ .Values.docBuilder.registryName | upper | replace "-" "_" }}_CRATESIO_TOKEN
+            valueFrom:
+              secretKeyRef: {{ toYaml .Values.docBuilder.tokenSecretRef | nindent 16 }}
+          {{- end }}
           {{- end }}
           {{- with .Values.extraEnvVars }}
           {{- toYaml . | nindent 10 }}

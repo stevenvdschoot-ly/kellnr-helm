@@ -22,6 +22,15 @@ data:
 
     [source.{{ .Values.docBuilder.registryName }}-local]
     registry = "sparse+http://localhost:{{ .Values.service.api.port }}{{ $ingressPath }}/api/v1/crates/"
+{{- if .Values.kellnr.proxy.enabled }}
+
+    [registries.{{ .Values.docBuilder.registryName }}-cratesio]
+    index = "sparse+http://localhost:{{ .Values.service.api.port }}{{ $ingressPath }}/api/v1/cratesio/"
+    credential-provider = ["cargo:token"]
+
+    [source.crates-io]
+    replace-with = "{{ .Values.docBuilder.registryName }}-cratesio"
+{{- end }}
 {{- with .Values.docBuilder.extraCargoConfig }}
 
 {{ . | indent 4 }}
